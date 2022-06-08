@@ -33,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.DELETE, "/dashboard/**").hasRole("ADMIN")
 				.antMatchers(HttpMethod.GET, "/dashboard/**").hasAnyRole("ADMIN", "USER")
 				.antMatchers("/hello").permitAll()
+				.antMatchers("/pizza").permitAll()
 				.anyRequest().authenticated()
 				.and().httpBasic()
 				.and().cors().disable().csrf().disable();

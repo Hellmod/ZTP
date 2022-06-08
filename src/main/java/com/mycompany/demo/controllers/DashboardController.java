@@ -5,10 +5,15 @@
 package com.mycompany.demo.controllers;
 
 import com.mycompany.demo.entities.Book;
+import com.mycompany.demo.entities.Pizza;
+import com.mycompany.demo.mappers.PizzaRowMapper;
 import com.mycompany.demo.services.DashboardService;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,14 +22,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author pawel
- */
 @RestController
 public class DashboardController {
     @Autowired
     DashboardService dashboardService;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     ArrayList<Book> books = new ArrayList<>();
 
@@ -44,8 +48,48 @@ public class DashboardController {
         return dashboardService.getBook(id);
     }
 
+    @GetMapping("/pizza")
+    public List<Pizza> getPizzas() {
+        String sql = "SELECT * FROM pizzaMenu";
+
+        List<Pizza> listPizza = jdbcTemplate.query(
+                sql,
+                new PizzaRowMapper());
+
+        for (Pizza pizza : listPizza) {
+            System.out.println(pizza);
+        }
+
+        return listPizza;
+    }
+
+    @GetMapping("/shoppingCart")
+    public List<Pizza> getShoppingCart() {
+        String sql = "SELECT * FROM pizzaMenu WHERE ID = 1 ";
+
+        List<Pizza> listPizza = jdbcTemplate.query(
+                sql,
+                new PizzaRowMapper());
+
+        for (Pizza pizza : listPizza) {
+            System.out.println(pizza);
+        }
+
+        return listPizza;
+    }
+
     @GetMapping("/dashboard")
     public ArrayList<Book> getBooks() {
+        String sql = "SELECT * FROM pizzaMenu";
+
+        List<Pizza> listPizza = jdbcTemplate.query(
+                sql,
+                new PizzaRowMapper());
+
+        for (Pizza pizza : listPizza) {
+            System.out.println(pizza);
+        }
+
         return dashboardService.getBooks();
     }
 
