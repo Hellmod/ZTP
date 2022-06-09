@@ -32,21 +32,6 @@ public class DashboardController {
 
     ArrayList<Book> books = new ArrayList<>();
 
-    public DashboardController() {
-        books.add(new Book("tytuł1", "autor1", 1991));
-        books.add(new Book("tytuł2", "autor2", 1992));
-        books.add(new Book("tytuł3", "autor3", 1993));
-        books.add(new Book("tytuł4", "autor4", 1994));
-        books.add(new Book("tytuł5", "autor5", 1995));
-        books.add(new Book("tytuł6", "autor6", 1996));
-        books.add(new Book("tytuł7", "autor7", 1997));
-        books.add(new Book("tytuł8", "autor8", 1998));
-    }
-
-    @GetMapping("/dashboard/{id}")
-    public Book getBook(@PathVariable int id) {
-        return dashboardService.getBook(id);
-    }
 
     @GetMapping("/pizza")
     public List<Pizza> getPizzas() {
@@ -78,18 +63,66 @@ public class DashboardController {
         return listPizza;
     }
 
-    @GetMapping("/dashboard")
-    public ArrayList<Book> getBooks() {
-        String sql = "SELECT * FROM pizzaMenu";
+    @PostMapping("/pizza")
+    public Boolean createPizza(@RequestBody Pizza pizza) {
+        String sql = "INSERT INTO pizzaMenu (id, name, ingredients, price) VALUES (?, ?, ?, ?)";
+        int result = jdbcTemplate.update(sql, pizza.getId(),pizza.getName(), pizza.getIngredients(), pizza.getPrice());
 
-        List<Pizza> listPizza = jdbcTemplate.query(
-                sql,
-                new PizzaRowMapper());
-
-        for (Pizza pizza : listPizza) {
-            System.out.println(pizza);
+        if (result > 0) {
+            return true;
         }
 
+        return false;
+    }
+
+    @PutMapping("/pizza/{id}")
+    public Boolean updatePizza(@PathVariable int id, @RequestBody Pizza pizza) {
+
+        String sql = "UPDATE pizzaMenu SET name=?, ingredients=?, price=? WHERE id=?";
+        Object[] params = {pizza.getName(), pizza.getIngredients(), pizza.getPrice(), id};
+        int result = jdbcTemplate.update(sql, params);
+
+        if (result > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @DeleteMapping("/pizza/{id}")
+    public Boolean removePizza(@PathVariable int id) {
+
+        String sql = "DELETE FROM pizzaMenu WHERE id=?";
+        Object[] params = {id};
+        int result = jdbcTemplate.update(sql, params);
+
+        if (result > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public DashboardController() {
+        books.add(new Book("tytuł1", "autor1", 1991));
+        books.add(new Book("tytuł2", "autor2", 1992));
+        books.add(new Book("tytuł3", "autor3", 1993));
+        books.add(new Book("tytuł4", "autor4", 1994));
+        books.add(new Book("tytuł5", "autor5", 1995));
+        books.add(new Book("tytuł6", "autor6", 1996));
+        books.add(new Book("tytuł7", "autor7", 1997));
+        books.add(new Book("tytuł8", "autor8", 1998));
+    }
+
+    @GetMapping("/dashboard/{id}")
+    public Book getBook(@PathVariable int id) {
+        return dashboardService.getBook(id);
+    }
+
+
+    @GetMapping("/dashboard")
+    public ArrayList<Book> getBooks() {
         return dashboardService.getBooks();
     }
 
