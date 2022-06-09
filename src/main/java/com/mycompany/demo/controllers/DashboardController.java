@@ -65,8 +65,8 @@ public class DashboardController {
 
     @PostMapping("/pizza")
     public Boolean createPizza(@RequestBody Pizza pizza) {
-        String sql = "INSERT INTO pizzaMenu (id, name, ingredients, price) VALUES (?, ?, ?, ?)";
-        int result = jdbcTemplate.update(sql, pizza.getId(),pizza.getName(), pizza.getIngredients(), pizza.getPrice());
+        String sql = "INSERT INTO pizzaMenu ( name, ingredients, price) VALUES (?, ?, ?, ?)";
+        int result = jdbcTemplate.update(sql, pizza.getName(), pizza.getIngredients(), pizza.getPrice());
 
         if (result > 0) {
             return true;
