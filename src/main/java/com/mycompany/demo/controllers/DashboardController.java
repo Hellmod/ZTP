@@ -13,14 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class DashboardController {
@@ -63,16 +61,24 @@ public class DashboardController {
         return listPizza;
     }
 
-    @PostMapping("/pizza")
-    public Boolean createPizza(@RequestBody Pizza pizza) {
+
+    @RequestMapping(value = "/foo", method = RequestMethod.OPTIONS)
+    public ResponseEntity options(HttpServletResponse response) {
+
+        response.setHeader("Allow", "HEAD,GET,PUT,OPTIONS");
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/pizza", method = RequestMethod.OPTIONS)
+    public ResponseEntity createPizza(@RequestBody Pizza pizza) {
         String sql = "INSERT INTO menuPizza ( name, ingredients, price) VALUES (?, ?, ?, ?)";
         int result = jdbcTemplate.update(sql, pizza.getName(), pizza.getIngredients(), pizza.getPrice());
 
         if (result > 0) {
-            return true;
+            return new ResponseEntity(HttpStatus.OK);
         }
 
-        return false;
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/pizza/{id}")
