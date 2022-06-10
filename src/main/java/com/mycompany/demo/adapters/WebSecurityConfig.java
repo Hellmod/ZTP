@@ -32,12 +32,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.PUT, "/dashboard/**").hasRole("ADMIN")
 				.antMatchers(HttpMethod.DELETE, "/dashboard/**").hasRole("ADMIN")
 				.antMatchers(HttpMethod.GET, "/dashboard/**").hasAnyRole("ADMIN", "USER")
-				.antMatchers("/hello").permitAll()
+				.antMatchers("/hello").hasRole("ADMIN")
 				.antMatchers("/pizza").permitAll()
 				.antMatchers("/user").permitAll()
 				.antMatchers("/users").permitAll()
 				.antMatchers("/shoppingCart").permitAll()
 				.anyRequest().authenticated()
+				.and().formLogin().permitAll()
+				.and().logout().permitAll()
 				.and().httpBasic()
 				.and().cors().disable().csrf().disable();
 	}
