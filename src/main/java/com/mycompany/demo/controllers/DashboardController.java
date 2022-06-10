@@ -69,6 +69,7 @@ public class DashboardController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/pizza", method = RequestMethod.OPTIONS)
     public ResponseEntity createPizza(HttpServletResponse response,@RequestBody Pizza pizza) {
         response.setHeader("Allow", "HEAD,GET,PUT,OPTIONS");
