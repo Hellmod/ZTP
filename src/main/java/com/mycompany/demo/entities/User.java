@@ -6,10 +6,7 @@ package com.mycompany.demo.entities;
 
 import com.mycompany.demo.enums.Role;
 
-/**
- *
- * @author pawel
- */
+
 public class User {
     protected String login;
     protected String pass;

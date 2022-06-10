@@ -4,6 +4,6 @@
  */
 package com.mycompany.demo.enums;
 
-public enum Role {
-    ADMIN, USER
+public enum OrderStatus {
+    CREATED, PREPARING, SHIPPING, DELIVERED //sprawdzić czy odpowiednie wartości
 }

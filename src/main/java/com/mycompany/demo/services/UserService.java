@@ -11,10 +11,7 @@ import com.mycompany.demo.enums.Role;
 
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author pawel
- */
+
 @Service
 public class UserService {
     HashMap<String, User> users = new HashMap<String, User>();

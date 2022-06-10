@@ -10,10 +10,7 @@ import com.mycompany.demo.entities.Book;
 
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author pawel
- */
+
 @Service
 public class DashboardService {
     ArrayList<Book> books = new ArrayList<>();

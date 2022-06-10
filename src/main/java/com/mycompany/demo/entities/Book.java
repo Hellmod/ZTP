@@ -4,10 +4,6 @@
  */
 package com.mycompany.demo.entities;
 
-/**
- *
- * @author pawel
- */
 public class Book {
     protected String title;
     protected String author;

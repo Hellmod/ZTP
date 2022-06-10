@@ -4,6 +4,6 @@
  */
 package com.mycompany.demo.enums;
 
-public enum Role {
-    ADMIN, USER
+public enum RolePizza {
+    ADMIN, CUSTOMER, EMPLOYEE
 }
