@@ -13,7 +13,7 @@ public class PizzaRowMapper implements RowMapper<Pizza> {
 
         Pizza pizza = new Pizza();
 
-        pizza.setId(rs.getInt("id"));
+        pizza.setId(rs.getInt("menuID"));
         pizza.setName(rs.getString("name"));
         pizza.setIngredients(rs.getString("ingredients"));
         pizza.setPrice(rs.getInt("price"));

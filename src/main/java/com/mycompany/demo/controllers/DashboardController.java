@@ -35,7 +35,7 @@ public class DashboardController {
 
     @GetMapping("/pizza")
     public List<Pizza> getPizzas() {
-        String sql = "SELECT * FROM pizzaMenu";
+        String sql = "SELECT * FROM menuPizza";
 
         List<Pizza> listPizza = jdbcTemplate.query(
                 sql,
@@ -50,7 +50,7 @@ public class DashboardController {
 
     @GetMapping("/shoppingCart")
     public List<Pizza> getShoppingCart() {
-        String sql = "SELECT * FROM pizzaMenu WHERE ID = 1 ";
+        String sql = "SELECT * FROM menuPizza WHERE menuID = 1 ";
 
         List<Pizza> listPizza = jdbcTemplate.query(
                 sql,
@@ -65,7 +65,7 @@ public class DashboardController {
 
     @PostMapping("/pizza")
     public Boolean createPizza(@RequestBody Pizza pizza) {
-        String sql = "INSERT INTO pizzaMenu ( name, ingredients, price) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO menuPizza ( name, ingredients, price) VALUES (?, ?, ?, ?)";
         int result = jdbcTemplate.update(sql, pizza.getName(), pizza.getIngredients(), pizza.getPrice());
 
         if (result > 0) {
@@ -78,7 +78,7 @@ public class DashboardController {
     @PutMapping("/pizza/{id}")
     public Boolean updatePizza(@PathVariable int id, @RequestBody Pizza pizza) {
 
-        String sql = "UPDATE pizzaMenu SET name=?, ingredients=?, price=? WHERE id=?";
+        String sql = "UPDATE menuPizza SET name=?, ingredients=?, price=? WHERE menuID =?";
         Object[] params = {pizza.getName(), pizza.getIngredients(), pizza.getPrice(), id};
         int result = jdbcTemplate.update(sql, params);
 
@@ -92,7 +92,7 @@ public class DashboardController {
     @DeleteMapping("/pizza/{id}")
     public Boolean removePizza(@PathVariable int id) {
 
-        String sql = "DELETE FROM pizzaMenu WHERE id=?";
+        String sql = "DELETE FROM menuPizza WHERE menuID=?";
         Object[] params = {id};
         int result = jdbcTemplate.update(sql, params);
 
