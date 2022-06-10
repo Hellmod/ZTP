@@ -72,7 +72,7 @@ public class DashboardController {
     @RequestMapping(value = "/pizza", method = RequestMethod.OPTIONS)
     public ResponseEntity createPizza(HttpServletResponse response,@RequestBody Pizza pizza) {
         response.setHeader("Allow", "HEAD,GET,PUT,OPTIONS");
-        String sql = "INSERT INTO menuPizza ( name, ingredients, price) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO menuPizza ( name, ingredients, price) VALUES (?, ?, ?)";
         int result = jdbcTemplate.update(sql, pizza.getName(), pizza.getIngredients(), pizza.getPrice());
 
         if (result > 0) {
