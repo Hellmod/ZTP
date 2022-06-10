@@ -70,7 +70,7 @@ public class DashboardController {
     }
 
     @CrossOrigin
-    @RequestMapping(value = "/pizza", method = RequestMethod.OPTIONS)
+    @PostMapping(value = "/pizza")
     public ResponseEntity createPizza(HttpServletResponse response,@RequestBody Pizza pizza) {
         response.setHeader("Allow", "HEAD,GET,PUT,OPTIONS");
         String sql = "INSERT INTO menuPizza ( name, ingredients, price) VALUES (?, ?, ?)";
