@@ -17,7 +17,7 @@ public class UserRowMapper implements RowMapper<PizzaUser> {
         pizza.setUsername(rs.getString("username"));
         pizza.setPassword(rs.getString("password"));
         pizza.setFullName(rs.getString("fullName"));
-        pizza.setRoleUser(rs.getString("roleUser"));
+        pizza.setUserGroup(rs.getString("roleUser"));
 
         return pizza;
 

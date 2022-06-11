@@ -8,20 +8,18 @@ public class Order {
     private int id;
     private int idClient;
     private String status;
-    //private OrderStatus status;
-    private String OrderTime;
+    //private String OrderTime;
     //private Timestamp OrderTime;
 
-    protected Order(int id, int idClient, String status, String OrderTime) {
+    protected Order(int id, int idClient, String status) {
         this.id = id;
         this.idClient = idClient;
         this.status = status;
-        this.OrderTime = OrderTime;
     }
 
     @Override
     public String toString() {
-        return "Order [" + id + ", " + idClient + ", " + status + ", " + OrderTime + "]";
+        return "Order [" + id + ", " + idClient + ", " + status + ", " + "]";
     }
 
     public int getId() {
@@ -47,18 +45,7 @@ public class Order {
         this.status = status;
     }
 
-    public String getOrderTime() {
-        return OrderTime;
-    }
-
-    public void setOrderTime(String orderTime) {
-        this.OrderTime = orderTime;
-    }
-
     public Order() {
-    }
-
-    public void getOrderTime(String orderTime) {
     }
 
 

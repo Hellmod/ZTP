@@ -15,11 +15,12 @@ import java.util.List;
 
 @RestController
 public class OrderController {
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/order")
-    public List<Order> getPizzas() {
+    @GetMapping("/orders")
+    public List<Order> getOrder() {
         String sql = "SELECT * FROM orderPizza";
 
         List<Order> listOrder = jdbcTemplate.query(
@@ -51,7 +52,7 @@ public class OrderController {
 
     @PostMapping("/pizza")
     public Boolean createPizza(@RequestBody Pizza pizza) {
-        String sql = "INSERT INTO menuPizza ( name, ingredients, price) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO menuPizza ( name, ingredients, price) VALUES (?, ?, ?)";
         int result = jdbcTemplate.update(sql, pizza.getName(), pizza.getIngredients(), pizza.getPrice());
 
         if (result > 0) {
