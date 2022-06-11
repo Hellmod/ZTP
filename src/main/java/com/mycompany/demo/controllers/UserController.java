@@ -24,7 +24,6 @@ public class UserController {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-
     @GetMapping("/users")
     public List<PizzaUser> getUsers() {
         String sql = "SELECT * FROM userPizza";
@@ -75,7 +74,7 @@ public class UserController {
     public Boolean updateUser(@PathVariable int id, @RequestBody PizzaUser user) {
 
         String sql = "UPDATE userPizza SET username = ?, fullName = ?, roleUser =? WHERE userID =?";
-        Object[] params = {user.getUsername(), user.getFullName(), user.getRoleUser(), id};
+        Object[] params = {user.getUsername(), user.getFullName(), user.getUserGroup(), id};
         int result = jdbcTemplate.update(sql, params);
 
         if (result > 0) {

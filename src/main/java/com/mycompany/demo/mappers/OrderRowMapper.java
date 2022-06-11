@@ -15,10 +15,9 @@ public class OrderRowMapper implements RowMapper<Order> {
 
         Order order = new Order();
 
-        order.setId(rs.getInt("orderID "));
-        order.setIdClient(rs.getInt("clientID  "));
+        order.setId(rs.getInt("orderID"));
+        order.setIdClient(rs.getInt("clientID"));
         order.setStatus(rs.getString("status"));
-        order.getOrderTime(rs.getString("OrderTime"));
 
         return order;
 

@@ -7,14 +7,15 @@ public class PizzaUser {
     private String username;
     private String password;
     private String fullName;
-    private String roleUser;
-    //private RolePizza roleUser;
+    private String UserGroup;
 
 
-    protected PizzaUser(int id, String name, String ingredients, int price) {
+    protected PizzaUser(int id, String username, String password, String fullName, String UserGroup) {
         this.id = id;
-        this.username = name;
-        this.password = ingredients;
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.UserGroup = UserGroup;
     }
 
     public PizzaUser() {
@@ -23,7 +24,7 @@ public class PizzaUser {
 
     @Override
     public String toString() {
-        return "User [" + id + ", "+ username + ", " + password + ", " + fullName + ", " + roleUser + "]";
+        return "User [" + id + ", "+ username + ", " + password + ", " + fullName + ", " + UserGroup + "]";
     }
 
     public int getId() {
@@ -46,12 +47,12 @@ public class PizzaUser {
         this.fullName = fullName;
     }
 
-    public String getRoleUser() {
-        return roleUser;
+    public String getUserGroup() {
+        return UserGroup;
     }
 
-    public void setRoleUser(String roleUser) {
-        this.roleUser = roleUser;
+    public void setUserGroup(String UserGroup) {
+        this.UserGroup = UserGroup;
     }
 
     public void setUsername(String username) {
