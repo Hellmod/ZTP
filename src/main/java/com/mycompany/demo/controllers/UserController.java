@@ -54,13 +54,14 @@ public class UserController {
 
     @PostMapping("/register")
     public Boolean createUser(@RequestBody PizzaUser user) {
+        String sqlFirst = "SELECT * FROM userPizza WHERE username=?";
+        Object[] params = {user.getUsername()};
+        List<PizzaUser> listUsers = jdbcTemplate.query(sqlFirst,params, new UserRowMapper());
 
-        String sqltest = "SELECT * FROM userPizza WHERE username=?";
-        int test = jdbcTemplate.update(sqltest, user.getUsername());
 
-        if(test<=0) {
+        if(listUsers.isEmpty()) {
 
-            String sql = "INSERT INTO userPizza(username, password, fullName, roleUser) VALUES (?, ?, ?, 'CUSTOMER')";
+            String sql = "INSERT INTO userPizza(username, password, fullName, roleUser) VALUES (?, ?, ?, 'customer')";
             int result = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getFullName());
 
             if (result > 0) {
