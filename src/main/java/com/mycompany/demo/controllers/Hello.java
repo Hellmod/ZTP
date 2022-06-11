@@ -32,7 +32,7 @@ public class Hello {
             return "Guest";
         }
 
-        return listUsers.get(0).getRoleUser();
+        return listUsers.get(0).getUserGroup();
     }
 
 }
