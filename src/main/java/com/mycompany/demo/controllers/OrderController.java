@@ -6,6 +6,7 @@ package com.mycompany.demo.controllers;
 
 import com.mycompany.demo.entities.Order;
 import com.mycompany.demo.entities.Pizza;
+import com.mycompany.demo.entities.PizzaUser;
 import com.mycompany.demo.mappers.OrderRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -49,45 +50,39 @@ public class OrderController {
 
         return listOrder;
     }
-
-    @PostMapping("/pizza")
-    public Boolean createPizza(@RequestBody Pizza pizza) {
-        String sql = "INSERT INTO menuPizza ( name, ingredients, price) VALUES (?, ?, ?)";
-        int result = jdbcTemplate.update(sql, pizza.getName(), pizza.getIngredients(), pizza.getPrice());
-
-        if (result > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    @PutMapping("/pizza/{id}")
-    public Boolean updatePizza(@PathVariable int id, @RequestBody Pizza pizza) {
-
-        String sql = "UPDATE menuPizza SET name=?, ingredients=?, price=? WHERE menuID =?";
-        Object[] params = {pizza.getName(), pizza.getIngredients(), pizza.getPrice(), id};
-        int result = jdbcTemplate.update(sql, params);
-
-        if (result > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    @DeleteMapping("/pizza/{id}")
-    public Boolean removePizza(@PathVariable int id) {
-
-        String sql = "DELETE FROM menuPizza WHERE menuID=?";
-        Object[] params = {id};
-        int result = jdbcTemplate.update(sql, params);
-
-        if (result > 0) {
-            return true;
-        }
-
-        return false;
-    }
     */
+
+    @PostMapping("/order")
+    public Boolean createOrder(@RequestBody List<Integer> pizze, @RequestBody PizzaUser clent ){ //(@RequestBody List<Integer>)(@RequestBody Order order)
+        //Integer who=0; //tu jakoś id usera(clientID) z sesji
+        String sql = "INSERT INTO orderPizza(clientID, status) VALUES (?, 'created')";
+        int result = jdbcTemplate.update(sql, clent);
+
+        if (result > 0) {
+            for (Integer idPizzy : pizze) {
+                String sqlPizzas = "INSERT INTO cartPizza(orderID, menuID) VALUES (?,?)";
+                int weakEntity = jdbcTemplate.update(sqlPizzas, clent, idPizzy);
+                if (weakEntity > 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @PutMapping("/order/{id}")
+    public Boolean updateOrder(@PathVariable int id, @RequestBody Order order) {
+
+        String sql = "UPDATE orderPizza SET status =? WHERE orderID=?";
+        Object[] params = {order.getStatus(), id};
+        int result = jdbcTemplate.update(sql, params);
+
+        if (result > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+
 }
