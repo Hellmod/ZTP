@@ -65,9 +65,52 @@ public class OrderController {
             } else if (Objects.equals(listUsers.get(0).getUserGroup(), "employee")) {
                 String sql = "SELECT * FROM orderPizza WHERE status!=delivered";
                 listOrder = jdbcTemplate.query(sql, new OrderRowMapper());
+
+                for (Order order : listOrder) {
+                    List<Integer> pizzaIdList = new ArrayList<>();
+
+                    String sqlBLA = "SELECT * FROM cartPizza WHERE orderid = ?";
+                    Object[] paramsBLA = {order.getId()};
+                    listCart = jdbcTemplate.query(sqlBLA, paramsBLA, new CartRowMapper());
+
+                    for (Cart cart : listCart) {
+                        pizzaIdList.add(cart.getMenuid());
+                    }
+
+                    response.add(
+                            new OrderWithPizzas(
+                                    order.getId(),
+                                    order.getIdClient(),
+                                    order.getStatus(),
+                                    pizzaIdList
+                            )
+                    );
+                }
+
             } else if (Objects.equals(listUsers.get(0).getUserGroup(), "admin")) {
                 String sql = "SELECT * FROM orderPizza";
                 listOrder = jdbcTemplate.query(sql, new OrderRowMapper());
+
+                for (Order order : listOrder) {
+                    List<Integer> pizzaIdList = new ArrayList<>();
+
+                    String sqlBLA = "SELECT * FROM cartPizza WHERE orderid = ?";
+                    Object[] paramsBLA = {order.getId()};
+                    listCart = jdbcTemplate.query(sqlBLA, paramsBLA, new CartRowMapper());
+
+                    for (Cart cart : listCart) {
+                        pizzaIdList.add(cart.getMenuid());
+                    }
+
+                    response.add(
+                            new OrderWithPizzas(
+                                    order.getId(),
+                                    order.getIdClient(),
+                                    order.getStatus(),
+                                    pizzaIdList
+                            )
+                    );
+                }
             }
 
         }
