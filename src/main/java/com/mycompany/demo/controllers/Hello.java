@@ -22,16 +22,19 @@ public class Hello {
     }
 
     @GetMapping("/role")
-    public String sayAuth() {
+    public PizzaUser sayAuth() {
         String sqlFirst = "SELECT * FROM userPizza WHERE username=?";
         Object[] params = { UserUtilities.getLoggedUser()};
         List<PizzaUser> listUsers = jdbcTemplate.query(sqlFirst,params, new UserRowMapper());
 
-        if(listUsers==null|| listUsers.isEmpty()){
-            return "Guest";
-        }
 
-        return listUsers.get(0).getUserGroup();
+        if(listUsers==null|| listUsers.isEmpty()){
+            return new PizzaUser();
+        }
+        PizzaUser response = listUsers.get(0);
+        response.setPassword("");
+
+        return response;
     }
 
 }
