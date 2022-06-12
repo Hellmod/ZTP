@@ -95,13 +95,15 @@ public class OrderController {
         List<Order> newId = jdbcTemplate.query(sqlSec, new OrderRowMapper());
 
         if (result > 0) {
+            int weakEntity=-1;
             for (Integer idPizzy : pizze) {
                 String sqlPizzas = "INSERT INTO cartPizza(orderID, menuID) VALUES (?,?)";
-                int weakEntity = jdbcTemplate.update(sqlPizzas, newId.get(0).getId(), idPizzy);
-                if (weakEntity > 0) {
-                    return true;
-                }
+                weakEntity = jdbcTemplate.update(sqlPizzas, newId.get(0).getId(), idPizzy);
             }
+            if (weakEntity > 0) {
+                    return true;
+            }
+
         }
         return false;
     }
