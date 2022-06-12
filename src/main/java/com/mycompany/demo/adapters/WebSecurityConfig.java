@@ -1,5 +1,6 @@
 package com.mycompany.demo.adapters;
 
+import com.mycompany.demo.enums.Role;
 import com.mycompany.demo.services.UserDetailsServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/user").permitAll()
 				.antMatchers("/users").permitAll()
 				.antMatchers("/shoppingCart").permitAll()
+				.antMatchers("/orders").hasAnyRole(Role.ADMIN.toString(), Role.CUSTOMER.toString(), Role.EMPLOYEE.toString())
 				.anyRequest().authenticated()
 				.and().formLogin().permitAll()
 				.and().logout().permitAll()

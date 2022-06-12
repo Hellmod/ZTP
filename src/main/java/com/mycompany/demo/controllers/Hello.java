@@ -23,10 +23,9 @@ public class Hello {
 
     @GetMapping("/role")
     public String sayAuth() {
-        UserUtilities.getLoggedUser();
-
-        String sql = "SELECT * FROM userPizza WHERE username=?";
-        List<PizzaUser> listUsers = jdbcTemplate.query(sql, new UserRowMapper());
+        String sqlFirst = "SELECT * FROM userPizza WHERE username=?";
+        Object[] params = { UserUtilities.getLoggedUser()};
+        List<PizzaUser> listUsers = jdbcTemplate.query(sqlFirst,params, new UserRowMapper());
 
         if(listUsers==null|| listUsers.isEmpty()){
             return "Guest";

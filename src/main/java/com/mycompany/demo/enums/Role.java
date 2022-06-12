@@ -5,5 +5,5 @@
 package com.mycompany.demo.enums;
 
 public enum Role {
-    ADMIN, USER
+    ADMIN, EMPLOYEE, CUSTOMER
 }

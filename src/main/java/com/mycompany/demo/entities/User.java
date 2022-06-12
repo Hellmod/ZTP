@@ -15,7 +15,7 @@ public class User {
     public User(String login, String pass) {
         this.login = login;
         this.pass = pass;
-        this.role = Role.USER;
+        this.role = Role.CUSTOMER;
     }
 
     public User(String login, String pass, Role role) {
