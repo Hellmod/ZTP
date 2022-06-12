@@ -63,7 +63,7 @@ public class OrderController {
                 }
 
             } else if (Objects.equals(listUsers.get(0).getUserGroup(), "employee")) {
-                String sql = "SELECT * FROM orderPizza WHERE status!=delivered";
+                String sql = "SELECT * FROM orderPizza WHERE status!='delivered'";
                 listOrder = jdbcTemplate.query(sql, new OrderRowMapper());
 
                 for (Order order : listOrder) {
