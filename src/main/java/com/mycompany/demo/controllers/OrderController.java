@@ -39,6 +39,9 @@ public class OrderController {
             } else if (Objects.equals(listUsers.get(0).getUserGroup(), "employee")) {
                 String sql = "SELECT * FROM orderPizza WHERE status!=delivered";
                 listOrder = jdbcTemplate.query(sql, new OrderRowMapper());
+            }else if (Objects.equals(listUsers.get(0).getUserGroup(), "admin")) {
+                String sql = "SELECT * FROM orderPizza";
+                listOrder = jdbcTemplate.query(sql, new OrderRowMapper());
             }
 
         }
@@ -68,15 +71,24 @@ public class OrderController {
     */
 
     @PostMapping("/order")
-    public Boolean createOrder(@RequestBody List<Integer> pizze, @RequestBody PizzaUser clent) { //(@RequestBody List<Integer>)(@RequestBody Order order)
+    public Boolean createOrder(@RequestBody List<Integer> pizze) {
+
+        String sqlFirst = "SELECT * FROM userPizza WHERE username=?";
+        Object[] paramsFirst = { UserUtilities.getLoggedUser()};
+        List<PizzaUser> listUsers = jdbcTemplate.query(sqlFirst,paramsFirst, new UserRowMapper());
+
+
         //Integer who=0; //tu jakoś id usera(clientID) z sesji
         String sql = "INSERT INTO orderPizza(clientID, status) VALUES (?, 'created')";
-        int result = jdbcTemplate.update(sql, clent);
+        int result = jdbcTemplate.update(sql, listUsers.get(0).getId());
+
+        String sqlSec = "SELECT * FROM orderPizza WHERE orderid=(SELECT max(orderid) FROM orderPizza)";
+        List<Order> newId = jdbcTemplate.query(sqlSec, new OrderRowMapper());
 
         if (result > 0) {
             for (Integer idPizzy : pizze) {
                 String sqlPizzas = "INSERT INTO cartPizza(orderID, menuID) VALUES (?,?)";
-                int weakEntity = jdbcTemplate.update(sqlPizzas, clent, idPizzy);
+                int weakEntity = jdbcTemplate.update(sqlPizzas, newId.get(0).getId(), idPizzy);
                 if (weakEntity > 0) {
                     return true;
                 }
