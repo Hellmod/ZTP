@@ -4,10 +4,8 @@
  */
 package com.mycompany.demo.controllers;
 
-import com.mycompany.demo.entities.Order;
-import com.mycompany.demo.entities.OrderWithPizzas;
-import com.mycompany.demo.entities.Pizza;
-import com.mycompany.demo.entities.PizzaUser;
+import com.mycompany.demo.entities.*;
+import com.mycompany.demo.mappers.CartRowMapper;
 import com.mycompany.demo.mappers.OrderRowMapper;
 import com.mycompany.demo.mappers.PizzaRowMapper;
 import com.mycompany.demo.mappers.UserRowMapper;
@@ -33,7 +31,9 @@ public class OrderController {
         Object[] paramsFirst = {UserUtilities.getLoggedUser()};
         List<PizzaUser> listUsers = jdbcTemplate.query(sqlFirst, paramsFirst, new UserRowMapper());
         List<Order> listOrder = new ArrayList<>();
-        List<Pizza> listPizza = new ArrayList<>();
+        List<Cart> listCart = new ArrayList<>();
+        List<OrderWithPizzas> response = new ArrayList<>();
+
 
         if (!listUsers.isEmpty()) {
             if (Objects.equals(listUsers.get(0).getUserGroup(), "customer")) {
@@ -42,9 +42,24 @@ public class OrderController {
                 listOrder = jdbcTemplate.query(sql, params, new OrderRowMapper());
 
                 for (Order order : listOrder) {
-                    String sqlBLA = "SELECT * FROM menuPizza WHERE menuID = ?";
+                    List<Integer> pizzaIdList = new ArrayList<>();
+
+                    String sqlBLA = "SELECT * FROM cartPizza WHERE orderid = ?";
                     Object[] paramsBLA = {order.getId()};
-                    listPizza = jdbcTemplate.query(sqlBLA, paramsBLA, new PizzaRowMapper());
+                    listCart = jdbcTemplate.query(sqlBLA, paramsBLA, new CartRowMapper());
+
+                    for (Cart cart : listCart) {
+                        pizzaIdList.add(cart.getMenuid());
+                    }
+
+                    response.add(
+                            new OrderWithPizzas(
+                                    order.getId(),
+                                    order.getIdClient(),
+                                    order.getStatus(),
+                                    pizzaIdList
+                            )
+                    );
                 }
 
             } else if (Objects.equals(listUsers.get(0).getUserGroup(), "employee")) {
@@ -61,43 +76,8 @@ public class OrderController {
             System.out.println(order);
         }
 
-        List<OrderWithPizzas> response = new ArrayList<>();
-
-        for (Order order : listOrder) {
-
-            List<Integer> pizzasList = new ArrayList<>();
-            for (Pizza pizza : listPizza) {
-                pizzasList.add(pizza.getId());
-            }
-            response.add(
-                    new OrderWithPizzas(
-                            order.getId(),
-                            order.getIdClient(),
-                            order.getStatus(),
-                            pizzasList
-                    )
-            );
-        }
-
         return response;
     }
-    /*
-
-    @GetMapping("/shoppingCart")
-    public List<Order> getShoppingCart() {
-        String sql = "SELECT * FROM menuPizza WHERE menuID = 1 ";
-
-        List<Order> listOrder = jdbcTemplate.query(
-                sql,
-                new OrderRowMapper());
-
-        for (Order order : listOrder) {
-            System.out.println(order);
-        }
-
-        return listOrder;
-    }
-    */
 
     @PostMapping("/order")
     public Boolean createOrder(@RequestBody List<Integer> pizze) {
