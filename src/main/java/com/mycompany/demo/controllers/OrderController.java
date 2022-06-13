@@ -41,76 +41,19 @@ public class OrderController {
                 Object[] params = {listUsers.get(0).getId()};
                 listOrder = jdbcTemplate.query(sql, params, new OrderRowMapper());
 
-                for (Order order : listOrder) {
-                    List<Integer> pizzaIdList = new ArrayList<>();
-
-                    String sqlBLA = "SELECT * FROM cartPizza WHERE orderid = ?";
-                    Object[] paramsBLA = {order.getId()};
-                    listCart = jdbcTemplate.query(sqlBLA, paramsBLA, new CartRowMapper());
-
-                    for (Cart cart : listCart) {
-                        pizzaIdList.add(cart.getMenuid());
-                    }
-
-                    response.add(
-                            new OrderWithPizzas(
-                                    order.getId(),
-                                    order.getIdClient(),
-                                    order.getStatus(),
-                                    pizzaIdList
-                            )
-                    );
-                }
+                generateResponce(listOrder, response);
 
             } else if (Objects.equals(listUsers.get(0).getUserGroup(), "employee")) {
                 String sql = "SELECT * FROM orderPizza WHERE status!='delivered'";
                 listOrder = jdbcTemplate.query(sql, new OrderRowMapper());
 
-                for (Order order : listOrder) {
-                    List<Integer> pizzaIdList = new ArrayList<>();
-
-                    String sqlBLA = "SELECT * FROM cartPizza WHERE orderid = ?";
-                    Object[] paramsBLA = {order.getId()};
-                    listCart = jdbcTemplate.query(sqlBLA, paramsBLA, new CartRowMapper());
-
-                    for (Cart cart : listCart) {
-                        pizzaIdList.add(cart.getMenuid());
-                    }
-
-                    response.add(
-                            new OrderWithPizzas(
-                                    order.getId(),
-                                    order.getIdClient(),
-                                    order.getStatus(),
-                                    pizzaIdList
-                            )
-                    );
-                }
+                generateResponce(listOrder, response);
 
             } else if (Objects.equals(listUsers.get(0).getUserGroup(), "admin")) {
                 String sql = "SELECT * FROM orderPizza";
                 listOrder = jdbcTemplate.query(sql, new OrderRowMapper());
 
-                for (Order order : listOrder) {
-                    List<Integer> pizzaIdList = new ArrayList<>();
-
-                    String sqlBLA = "SELECT * FROM cartPizza WHERE orderid = ?";
-                    Object[] paramsBLA = {order.getId()};
-                    listCart = jdbcTemplate.query(sqlBLA, paramsBLA, new CartRowMapper());
-
-                    for (Cart cart : listCart) {
-                        pizzaIdList.add(cart.getMenuid());
-                    }
-
-                    response.add(
-                            new OrderWithPizzas(
-                                    order.getId(),
-                                    order.getIdClient(),
-                                    order.getStatus(),
-                                    pizzaIdList
-                            )
-                    );
-                }
+                generateResponce(listOrder, response);
             }
 
         }
@@ -120,6 +63,36 @@ public class OrderController {
         }
 
         return response;
+    }
+
+    private void generateResponce(List<Order> listOrder, List<OrderWithPizzas> response) {
+        List<Cart> listCart;
+        for (Order order : listOrder) {
+            List<Integer> pizzaIdList = new ArrayList<>();
+
+            String sqlFirst = "SELECT * FROM userPizza WHERE userid=?";
+            Object[] params = {order.getIdClient()};
+            List<PizzaUser> listUsers = jdbcTemplate.query(sqlFirst,params, new UserRowMapper());
+
+            String sqlBLA = "SELECT * FROM cartPizza WHERE orderid = ?";
+            Object[] paramsBLA = {order.getId()};
+            listCart = jdbcTemplate.query(sqlBLA, paramsBLA, new CartRowMapper());
+
+            for (Cart cart : listCart) {
+                pizzaIdList.add(cart.getMenuid());
+            }
+
+            String fullname = listUsers.get(0).getFullName();
+            response.add(
+                    new OrderWithPizzas(
+                            order.getId(),
+                            order.getIdClient(),
+                            order.getStatus(),
+                            pizzaIdList,
+                            fullname
+                    )
+            );
+        }
     }
 
     @PostMapping("/order")
@@ -138,13 +111,13 @@ public class OrderController {
         List<Order> newId = jdbcTemplate.query(sqlSec, new OrderRowMapper());
 
         if (result > 0) {
-            int weakEntity=-1;
+            int weakEntity = -1;
             for (Integer idPizzy : pizze) {
                 String sqlPizzas = "INSERT INTO cartPizza(orderID, menuID) VALUES (?,?)";
                 weakEntity = jdbcTemplate.update(sqlPizzas, newId.get(0).getId(), idPizzy);
             }
             if (weakEntity > 0) {
-                    return true;
+                return true;
             }
 
         }

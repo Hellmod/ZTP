@@ -7,13 +7,7 @@ public class OrderWithPizzas {
     private int idClient;
     private String status;
     private List<Integer> pizzas;
-
-
-    protected OrderWithPizzas(int id, int idClient, String status) {
-        this.id = id;
-        this.idClient = idClient;
-        this.status = status;
-    }
+    private String fullName;
 
     @Override
     public String toString() {
@@ -46,11 +40,12 @@ public class OrderWithPizzas {
     public OrderWithPizzas() {
     }
 
-    public OrderWithPizzas(int id, int idClient, String status, List<Integer> pizzas) {
+    public OrderWithPizzas(int id, int idClient, String status, List<Integer> pizzas, String fullName) {
         this.id = id;
         this.idClient = idClient;
         this.status = status;
         this.pizzas = pizzas;
+        this.fullName = fullName;
     }
 
     public List<Integer> getPizzas() {
@@ -61,5 +56,13 @@ public class OrderWithPizzas {
         this.pizzas = pizzas;
     }
 
-// getters and setters...
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    // getters and setters...
 }
