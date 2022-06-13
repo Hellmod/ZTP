@@ -1,7 +1,7 @@
 # Aplikacja do zamawiania pizzy
 
 ## Serwer API
-Żeby uruchomić serwer trzeba miec zainstalowe środowisko InteliJ i pobrać z repozytorium:https://github.com/Hellmod/ZTP najnowszą wersję kodu. Serwer jest równiez udostępniony pod adresem http://ztp-marzena-rafal.herokuapp.com/SimpleLibrarySpring/
+Żeby uruchomić serwer trzeba mieć zainstalowane środowisko intelliJ i pobrać z repozytorium: https://github.com/Hellmod/ZTP najnowszą wersję kodu. Serwer jest również udostępniony pod adresem http://ztp-marzena-rafal.herokuapp.com/SimpleLibrarySpring/
 
 ## Strona internetowa
 Żeby uruchomić aplikację webową, trzeba najpierw w pliku `website/src/config.ts` ustawić prawidłowy adres do
